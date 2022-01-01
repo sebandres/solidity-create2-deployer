@@ -1,63 +1,85 @@
-import { ethers } from '@nomiclabs/buidler'
-import { Signer } from 'ethers'
+import { ethers } from 'hardhat'
+import { Contract, ContractFactory, Signer } from 'ethers'
 import { assert } from 'chai'
 
 import {
   deployContract,
-  deployFactory,
   getCreate2Address,
   isDeployed,
 } from '../src/index'
+import { factoryAbi, factoryBytecode } from '../src/factory'
 
 describe('Happy Path', function () {
   let signer: Signer
-  let accountBytecode: string
+  let accountContractFactory: ContractFactory
+  let factoryContract: Contract
 
   before(async () => {
-    signer = (await ethers.getSigners())[0]
-    accountBytecode = (await ethers.getContractFactory('Account')).bytecode
+    signer = (await ethers.getSigners())[0];
+    accountContractFactory = await ethers.getContractFactory('Account');
+
+    var proxy = new ethers.ContractFactory(factoryAbi, factoryBytecode, signer);
+    factoryContract = await proxy.deploy();
+    // Wait for the transaction to be mined so we can get the actual contract that was created
+    await factoryContract.deployTransaction.wait();
   })
 
   it('should deploy factory', async function () {
-    await (
-      await signer.sendTransaction({
-        to: '0x2287Fa6efdEc6d8c3E0f4612ce551dEcf89A357A',
-        value: ethers.utils.parseEther('1'),
-      })
-    ).wait()
-    const factoryAddress = await deployFactory(ethers.provider)
-    console.log('Factory:', factoryAddress)
+    var proxy = new ethers.ContractFactory(factoryAbi, factoryBytecode, signer);
+    var deployedProxy = await proxy.deploy();
+    // Wait for the transaction to be mined so we can get the actual contract that was created
+    await deployedProxy.deployTransaction.wait();
+  })
+
+  it('should deploy a working contract', async function () {    
+    const salt = 'owner'
+
+    const result = await deployContract({
+      salt,
+      factory: factoryContract,
+      contractBytecode: accountContractFactory.bytecode,
+      constructorTypes: ['address'],
+      constructorArgs: ['0x303de46de694cC75A2F66dA93Ac86c6a6EeE607e'],
+      signer,
+    });
+
+    const accountContract = accountContractFactory.attach(result.address);
+    assert(
+      (await accountContract.owner()) === '0x303de46de694cC75A2F66dA93Ac86c6a6EeE607e',
+      'Owner is not the expcted one'
+    );
+
   })
 
   it('should deploy with string salt', async function () {
     const salt = 'hello'
 
-    const computedAddr = getCreate2Address({
+    const computedAddr = getCreate2Address({      
       salt,
-      contractBytecode: accountBytecode,
+      factoryAddress: factoryContract.address,
+      contractBytecode: accountContractFactory.bytecode,
       constructorTypes: ['address'],
       constructorArgs: ['0x303de46de694cc75a2f66da93ac86c6a6eee607e'],
-    })
+    });
 
-    console.log('Create2Address', computedAddr)
     assert(
       !(await isDeployed(computedAddr, ethers.provider)),
       'contract already deployed at this address',
-    )
+    );
 
     const result = await deployContract({
       salt,
-      contractBytecode: accountBytecode,
+      factory: factoryContract,
+      contractBytecode: accountContractFactory.bytecode,
       constructorTypes: ['address'],
       constructorArgs: ['0x303de46de694cc75a2f66da93ac86c6a6eee607e'],
       signer,
-    })
+    });
 
-    console.log('ContractAddress', result.address)
     assert(
       await isDeployed(computedAddr, ethers.provider),
       'contract not deployed at this address',
-    )
+    );
   })
 
   it('should deploy with number salt', async function () {
@@ -65,29 +87,32 @@ describe('Happy Path', function () {
 
     const computedAddr = getCreate2Address({
       salt,
-      contractBytecode: accountBytecode,
+      factoryAddress: factoryContract.address,
+      contractBytecode: accountContractFactory.bytecode,
       constructorTypes: ['address'],
       constructorArgs: ['0x303de46de694cc75a2f66da93ac86c6a6eee607e'],
-    })
+    });
 
-    console.log('Create2Address', computedAddr)
     assert(
       !(await isDeployed(computedAddr, ethers.provider)),
       'contract already deployed at this address',
-    )
+    );
 
     const result = await deployContract({
       salt,
-      contractBytecode: accountBytecode,
+      factory: factoryContract,
+      contractBytecode: accountContractFactory.bytecode,
       constructorTypes: ['address'],
       constructorArgs: ['0x303de46de694cc75a2f66da93ac86c6a6eee607e'],
       signer,
-    })
-
-    console.log('ContractAddress', result.address)
+    });
+    assert(
+        result.receipt.status === 1,
+        'Deployment wasn\'t successful'
+    );
     assert(
       await isDeployed(computedAddr, ethers.provider),
       'contract not deployed at this address',
-    )
+    );
   })
 })

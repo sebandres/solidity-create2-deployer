@@ -1,17 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2018",
     "module": "commonjs",
     "strict": true,
-    "esModuleInterop": true,
     "resolveJsonModule": true,
-    "declaration": true,
-    "outDir": "dist"
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "declaration": true
   },
-  "include": ["test", "./artifacts/**/*.json"],
-  "files": [
-    "buidler.config.ts",
-    "./node_modules/@nomiclabs/buidler-ethers/src/type-extensions.d.ts",
-    "./node_modules/@nomiclabs/buidler-waffle/src/type-extensions.d.ts"
-  ]
+  "include": ["./scripts", "./test", "./typechain"],
+  "files": ["./hardhat.config.ts"]
 }

@@ -10,3 +10,5 @@ dist
 #Buidler files
 cache
 artifacts
+
+typechain/

@@ -1,11 +1,8 @@
 import assert from 'assert'
-import { ethers, Signer } from 'ethers'
+import { Contract, ethers, Signer } from 'ethers'
 import { Provider, TransactionReceipt } from '@ethersproject/providers'
 
 import {
-  factoryAbi,
-  factoryBytecode,
-  factoryAddress,
   buildCreate2Address,
   buildBytecode,
   parseEvents,
@@ -20,20 +17,20 @@ import {
  */
 export async function deployContract({
   salt,
+  factory,
   contractBytecode,
   constructorTypes = [] as string[],
   constructorArgs = [] as any[],
   signer,
 }: {
   salt: string | number
+  factory: Contract
   contractBytecode: string
   constructorTypes?: string[]
   constructorArgs?: any[]
   signer: Signer
 }) {
   const saltHex = saltToHex(salt)
-
-  const factory = new ethers.Contract(factoryAddress, factoryAbi, signer)
 
   const bytecode = buildBytecode(
     constructorTypes,
@@ -43,7 +40,7 @@ export async function deployContract({
 
   const result = await (await factory.deploy(bytecode, saltHex)).wait()
 
-  const computedAddr = buildCreate2Address(saltHex, bytecode)
+  const computedAddr = buildCreate2Address(factory.address, saltHex, bytecode)
 
   const logs = parseEvents(result, factory.interface, 'Deployed')
 
@@ -65,16 +62,19 @@ export async function deployContract({
  */
 export function getCreate2Address({
   salt,
+  factoryAddress,
   contractBytecode,
   constructorTypes = [] as string[],
   constructorArgs = [] as any[],
 }: {
   salt: string | number
+  factoryAddress: string
   contractBytecode: string
   constructorTypes?: string[]
   constructorArgs?: any[]
 }) {
   return buildCreate2Address(
+    factoryAddress,
     saltToHex(salt),
     buildBytecode(constructorTypes, constructorArgs, contractBytecode),
   )
@@ -89,24 +89,4 @@ export function getCreate2Address({
 export async function isDeployed(address: string, provider: Provider) {
   const code = await provider.getCode(address)
   return code.slice(2).length > 0
-}
-
-/**
- * Deploy create2 factory for local development.
- *
- * Deploys the create2 factory locally for development purposes. Requires funding address `0x2287Fa6efdEc6d8c3E0f4612ce551dEcf89A357A` with eth to perform deployment.
- *
- */
-export async function deployFactory(provider: Provider) {
-  const key =
-    '0x563905A5FBF71C05A44BE9240E62DBD777D69A2E20D702AA584841AF7C04E939'
-  const signer = new ethers.Wallet(key, provider)
-  const Factory = new ethers.ContractFactory(
-    factoryAbi,
-    factoryBytecode,
-    signer,
-  )
-  const factory = await Factory.deploy()
-  assert.strictEqual(factory.address, factoryAddress)
-  return factory.address
 }

@@ -1,9 +1,10 @@
-pragma solidity >0.4.99 <0.6.0;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
 contract Account {
   address public owner;
 
-  constructor(address payable _owner) public {
+  constructor(address payable _owner) {
     owner = _owner;
   }
 
@@ -17,5 +18,5 @@ contract Account {
     selfdestruct(recipient);
   }
 
-  function() payable external {}
+  receive() payable external {}
 }
