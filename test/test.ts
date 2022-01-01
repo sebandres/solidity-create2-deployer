@@ -39,8 +39,7 @@ describe('Happy Path', function () {
       factory: factoryContract,
       contractBytecode: accountContractFactory.bytecode,
       constructorTypes: ['address'],
-      constructorArgs: ['0x303de46de694cC75A2F66dA93Ac86c6a6EeE607e'],
-      signer,
+      constructorArgs: ['0x303de46de694cC75A2F66dA93Ac86c6a6EeE607e']
     });
 
     const accountContract = accountContractFactory.attach(result.address);
@@ -72,8 +71,7 @@ describe('Happy Path', function () {
       factory: factoryContract,
       contractBytecode: accountContractFactory.bytecode,
       constructorTypes: ['address'],
-      constructorArgs: ['0x303de46de694cc75a2f66da93ac86c6a6eee607e'],
-      signer,
+      constructorArgs: ['0x303de46de694cc75a2f66da93ac86c6a6eee607e']
     });
 
     assert(
@@ -103,8 +101,7 @@ describe('Happy Path', function () {
       factory: factoryContract,
       contractBytecode: accountContractFactory.bytecode,
       constructorTypes: ['address'],
-      constructorArgs: ['0x303de46de694cc75a2f66da93ac86c6a6eee607e'],
-      signer,
+      constructorArgs: ['0x303de46de694cc75a2f66da93ac86c6a6eee607e']
     });
     assert(
         result.receipt.status === 1,

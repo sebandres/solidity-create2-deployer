@@ -45,13 +45,13 @@ const config: HardhatUserConfig = {
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
+    polygon: {
+        url: "https://polygon-rpc.com/",
+        accounts:
+          process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
     polygontest: {
       url: "https://rpc-mumbai.maticvigil.com/",
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-    },
-    polygon: {
-      url: "https://polygon-rpc.com/",
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
@@ -75,11 +75,26 @@ const config: HardhatUserConfig = {
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
+    fantom: {
+      url: "https://rpc.ftm.tools/",
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
     fantomtest: {
       url: "https://rpc.testnet.fantom.network/",
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
+    harmonytest: {
+      url: `https://api.s0.b.hmny.io`,
+      accounts: 
+        process.env.PRIVATE_KEY !== undefined ? [`0x${process.env.PRIVATE_KEY}`] : [],
+    },
+    harmony: {
+      url: `https://api.harmony.one`,
+      accounts: 
+        process.env.PRIVATE_KEY !== undefined ? [`0x${process.env.PRIVATE_KEY}`] : [],
+    }
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,

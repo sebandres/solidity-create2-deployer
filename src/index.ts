@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { Contract, ethers, Signer } from 'ethers'
+import { Contract } from 'ethers'
 import { Provider, TransactionReceipt } from '@ethersproject/providers'
 
 import {
@@ -8,6 +8,9 @@ import {
   parseEvents,
   saltToHex,
 } from './utils'
+
+
+export { factoryAbi, factoryBytecode } from './factory'
 
 /**
  * Deploy contract using create2.
@@ -21,14 +24,12 @@ export async function deployContract({
   contractBytecode,
   constructorTypes = [] as string[],
   constructorArgs = [] as any[],
-  signer,
 }: {
   salt: string | number
   factory: Contract
   contractBytecode: string
   constructorTypes?: string[]
   constructorArgs?: any[]
-  signer: Signer
 }) {
   const saltHex = saltToHex(salt)
 
