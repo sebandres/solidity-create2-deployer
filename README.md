@@ -99,6 +99,14 @@ Test contracts:
 npx hardhart test
 ```
 
+## Deployment
+
+The Create2 contract can be deployed to any network using the following command line:
+```
+PRIVATE_KEY=abcd1234... npx hardhat run scripts/migration/0000_deploy_create2_proxy.ts --network xxxx
+```
+Where network is one of the networks listed in the [hardhat.config.ts](./hardhat.config.ts)
+
 ### Tests
 
 Tests can be found [here](./test/).

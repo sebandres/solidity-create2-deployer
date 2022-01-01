@@ -1,8 +1,8 @@
 {
-  "name": "solidity-create2-deployer",
+  "name": "hardhat-solidity-create2-deployer",
   "version": "1.0.0",
   "description": "Javascript deployer for CREATE2 ethereum contracts.",
-  "homepage": "https://github.com/thegostep/solidity-create2-deployer",
+  "homepage": "https://github.com/sebandres/solidity-create2-deployer",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "engines": {
