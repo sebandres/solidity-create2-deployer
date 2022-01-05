@@ -94,6 +94,16 @@ const config: HardhatUserConfig = {
       url: `https://api.harmony.one`,
       accounts: 
         process.env.PRIVATE_KEY !== undefined ? [`0x${process.env.PRIVATE_KEY}`] : [],
+    },
+    hecotest: {
+      url: `https://http-testnet.hecochain.com`,
+      accounts: 
+        process.env.PRIVATE_KEY !== undefined ? [`${process.env.PRIVATE_KEY}`] : [],
+    },
+    heco: {
+      url: `https://http-mainnet.hecochain.com`,
+      accounts: 
+        process.env.PRIVATE_KEY !== undefined ? [`${process.env.PRIVATE_KEY}`] : [],
     }
   },
   gasReporter: {

@@ -27,6 +27,7 @@ This contract has now been deployed to `0x1E4A178a4B0B24C69ff9D4c5AC81bDdfe2AcF2
 * Binance Smart Chain Testnet
 * Fantom Testnet
 * Harmony Testnet (Shard 0)
+* Huobi ECO Testnet
 
 More will follow.
 
