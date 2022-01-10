@@ -104,6 +104,16 @@ const config: HardhatUserConfig = {
       url: `https://http-mainnet.hecochain.com`,
       accounts: 
         process.env.PRIVATE_KEY !== undefined ? [`${process.env.PRIVATE_KEY}`] : [],
+    },
+    celotest: {
+      url: `https://alfajores-forno.celo-testnet.org`,
+      accounts: 
+        process.env.PRIVATE_KEY !== undefined ? [`${process.env.PRIVATE_KEY}`] : [],
+    },
+    celo: {
+      url: `https://forno.celo.org`,
+      accounts: 
+        process.env.PRIVATE_KEY !== undefined ? [`${process.env.PRIVATE_KEY}`] : [],
     }
   },
   gasReporter: {
