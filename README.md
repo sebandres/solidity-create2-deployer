@@ -18,6 +18,8 @@ This contract has now been deployed to `0x1E4A178a4B0B24C69ff9D4c5AC81bDdfe2AcF2
 ### Mainnets
 
 * Polygon Mainnet
+* Binance Smart Chain Mainnet
+* Avalanche Mainnet
 
 ### Testnets
 
